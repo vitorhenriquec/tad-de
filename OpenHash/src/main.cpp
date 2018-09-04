@@ -1,10 +1,11 @@
-#include "../include/openhash.hpp"
+#include "../include/hashtable.hpp"
 
 int main(){
-	chainedHashtable<int> s1(5);
+	OpenHash<int> s1(5);
 	s1.add(2);
-	cout << "Encontrou: " << s1.findEl(2) << endl;
+	s1.add(3);
+	s1.add(4);
 	s1.del(2);
-	cout << "Tam: " << s1.size() << endl;
+	s1.print();
 	return 0;
 }
