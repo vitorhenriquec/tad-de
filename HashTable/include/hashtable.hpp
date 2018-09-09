@@ -12,53 +12,57 @@ using std::vector;
 #include<list>
 using std::list;
 
-#include <algorithm>    // std::find
+#include <algorithm>
 using std::find;
-/*#include<list>
-using std::list;
-*/
+
+#include <stdlib.h>
 
 template<class T>
 class chainedHashtable{
 	private:
-		vector<list<T>> buckets;
+		vector<list<T>> hashvector;
 		unsigned _size;
 		//
 	public:
-		chainedHashtable(unsigned size):buckets(size),_size(0){}
+		chainedHashtable(unsigned size):hashvector(size),_size(0){}
 		~chainedHashtable(){
 		}
-		unsigned size(){
+		unsigned size(){ //
 			return _size;
 		}
 		bool empty(){
 			return !size();
 		}
 		unsigned capacity(){
-			return buckets.size();
+			return hashvector.size();
 		}
 		unsigned hash(const T & value){
-			return value >> 1;
+			return value >> 1; //Deloca 1 bit da esquerda
 		}
 		void add(const T & value){
 			unsigned idx = hash(value)%capacity();
-			buckets[idx].push_back(value);
+			hashvector[idx].push_back(value);
 			_size+=1;
 		}
 
 		void del(const T & value){
 			unsigned idx = hash(value)%capacity();
-			auto pos = find(buckets[idx].begin(),buckets[idx].end(),value);
-			if(pos != buckets[idx].end()){
-				buckets[idx].erase(pos);
+			auto pos = find(hashvector[idx].begin(),hashvector[idx].end(),value);
+			if(pos != hashvector[idx].end()){
+				hashvector[idx].erase(pos);
 				_size-=1;
+				cout << value << " deletado com sucesso." << endl;
+			}
+			else{
+				cout << "Elemento " << value << " não encontrado." << endl;
+				exit(EXIT_FAILURE);
 			} 
 		}
 
 		bool findEl(const T & value){
 			unsigned idx = hash(value)%capacity();
-			const auto & pos = find(buckets[idx].begin(),buckets[idx].end(),value);
-			return pos != buckets[idx].end();
+			const auto & pos = find(hashvector[idx].begin(),hashvector[idx].end(),value);
+			return pos != hashvector[idx].end();
 		}
 };
 #endif
